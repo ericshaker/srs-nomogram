@@ -9,17 +9,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #1a1a1a;
-    --paper: #faf8f3;
-    --rule: #d4cfc2;
-    --rule-soft: #e8e3d6;
-    --accent: #8b2c1f;
-    --accent-soft: #d4a99c;
-    --positive: #2d5d3f;
-    --positive-soft: #b8d4c2;
-    --muted: #6b6557;
-    --highlight: #f0ead8;
-    --shadow: 0 1px 0 rgba(26,26,26,.04), 0 12px 32px -8px rgba(26,26,26,.08);
+    --ink: #1a1d23;
+    --paper: #f7f9fc;
+    --rule: #c5cdd8;
+    --rule-soft: #dde3ec;
+    --accent: #012169;
+    --accent-soft: #a3b3d4;
+    --positive: #2b5c8a;
+    --positive-soft: #a8c4dd;
+    --muted: #5a6472;
+    --highlight: #e8eef6;
+    --shadow: 0 1px 0 rgba(1,33,105,.04), 0 12px 32px -8px rgba(1,33,105,.10);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,13 +33,13 @@
     line-height: 1.5;
     min-height: 100vh;
     background-image:
-      radial-gradient(circle at 10% 10%, rgba(139,44,31,.025) 0, transparent 40%),
-      radial-gradient(circle at 90% 80%, rgba(45,93,63,.02) 0, transparent 40%);
+      radial-gradient(circle at 10% 10%, rgba(1,33,105,.03) 0, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(43,92,138,.025) 0, transparent 40%);
   }
 
   .grain {
-    position: fixed; inset: 0; pointer-events: none; opacity: .35; z-index: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    position: fixed; inset: 0; pointer-events: none; opacity: .22; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   .container {
@@ -307,6 +307,65 @@
     letter-spacing: 0.05em;
   }
 
+  /* Survival grid (Cox 1/3/5-yr output) */
+  .survival-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 8px;
+  }
+  .survival-row {
+    display: grid;
+    grid-template-columns: 70px 1fr 70px;
+    align-items: center;
+    gap: 14px;
+  }
+  .survival-time {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    color: var(--ink);
+    font-style: italic;
+  }
+  .survival-bar {
+    height: 28px;
+    background: var(--rule-soft);
+    position: relative;
+    overflow: hidden;
+    border-radius: 1px;
+  }
+  .survival-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--positive), #1a4263);
+    transition: width .4s cubic-bezier(.4,0,.2,1);
+    width: 0%;
+  }
+  .survival-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--positive);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Six-column segmented control variant (wraps on narrow screens) */
+  .segmented.six-col {
+    flex-wrap: wrap;
+  }
+  .segmented.six-col label {
+    flex: 1 1 33%;
+    min-width: 80px;
+    padding: 9px 8px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--rule);
+  }
+  @media (min-width: 600px) {
+    .segmented.six-col label {
+      flex: 1;
+      border-bottom: none;
+    }
+  }
+
   /* Decomposition */
   .decomp {
     margin-top: 24px;
@@ -387,7 +446,7 @@
 
   /* Warning banner */
   .warn {
-    background: rgba(139,44,31,.05);
+    background: rgba(1,33,105,.05);
     border: 1px solid var(--accent-soft);
     padding: 14px 18px;
     margin-bottom: 24px;
@@ -434,21 +493,22 @@
   <nav class="tabs" role="tablist">
     <button class="tab active" data-tab="receipt" role="tab"><span class="num">01</span>Receipt of Surgery</button>
     <button class="tab" data-tab="benefit" role="tab"><span class="num">02</span>Surgery Benefit</button>
+    <button class="tab" data-tab="prognosis" role="tab"><span class="num">03</span>Post-Surgery OS</button>
   </nav>
 
   <!-- ─────── TAB 1: RECEIPT OF SURGERY ─────── -->
   <section class="panel active" id="panel-receipt">
-    <div class="warn" style="background: rgba(45,93,63,.05); border-color: var(--positive-soft); color: var(--positive);">
+    <div class="warn" style="background: rgba(43,92,138,.06); border-color: var(--positive-soft); color: var(--positive);">
       <strong>Coefficients verified.</strong> Betas derived from the manuscript's Table 2 odds ratios (β = ln OR). Reference levels were flipped so each indicator favors surgery when present. The intercept (−3.43) is calibrated to the cohort's 21% surgery prevalence; the maximum-likelihood estimate should be substituted when available.
     </div>
 
     <div class="layout">
-      <div class="controls">
+      <div class="controls" data-model="receipt">
         <div class="control-group">
           <div class="control-label">Karnofsky Performance Status (KPS)
             <span class="hint">Pre-SRS</span>
           </div>
-          <div class="segmented" data-input="kps_receipt">
+          <div class="segmented" data-input="kps" data-model="receipt">
             <input type="radio" name="kps_r" id="kps_r_low" value="low">
             <label for="kps_r_low">40–70</label>
             <input type="radio" name="kps_r" id="kps_r_high" value="high" checked>
@@ -460,7 +520,7 @@
           <div class="control-label">Number of brain metastases treated
             <span class="hint">At first SRS</span>
           </div>
-          <div class="segmented" data-input="nmets_receipt">
+          <div class="segmented" data-input="nmets" data-model="receipt">
             <input type="radio" name="nmets_r" id="nmets_r_one" value="one">
             <label for="nmets_r_one">Single</label>
             <input type="radio" name="nmets_r" id="nmets_r_multi" value="multi" checked>
@@ -472,7 +532,7 @@
           <div class="control-label">Neurological deficit pre-SRS
             <span class="hint">Focal deficit</span>
           </div>
-          <div class="segmented" data-input="neuro_receipt">
+          <div class="segmented" data-input="neuro" data-model="receipt">
             <input type="radio" name="neuro_r" id="neuro_r_no" value="no" checked>
             <label for="neuro_r_no">No</label>
             <input type="radio" name="neuro_r" id="neuro_r_yes" value="yes">
@@ -484,7 +544,7 @@
           <div class="control-label">Maximum target diameter
             <span class="hint">Largest lesion</span>
           </div>
-          <div class="segmented" data-input="diam_receipt">
+          <div class="segmented" data-input="diam" data-model="receipt">
             <input type="radio" name="diam_r" id="diam_r_small" value="small" checked>
             <label for="diam_r_small">&lt; 2.5 cm</label>
             <input type="radio" name="diam_r" id="diam_r_large" value="large">
@@ -541,67 +601,27 @@ P(surgery) = 1 / (1 + exp(−η))
 
   <!-- ─────── TAB 2: SURGERY BENEFIT ─────── -->
   <section class="panel" id="panel-benefit">
-    <div class="warn">
-      <strong>Placeholder coefficients.</strong> Tab 2 is wired up but uses provisional weights pending the underlying logistic model output. Swap real values in the <code>MODELS.benefit</code> block in the source.
-    </div>
-
     <div class="layout">
-      <div class="controls">
-        <div class="control-group">
-          <div class="control-label">Karnofsky Performance Status (KPS)
-            <span class="hint">Pre-SRS</span>
-          </div>
-          <div class="segmented" data-input="kps_benefit">
-            <input type="radio" name="kps_b" id="kps_b_low" value="low" checked>
-            <label for="kps_b_low">≤ 70</label>
-            <input type="radio" name="kps_b" id="kps_b_high" value="high">
-            <label for="kps_b_high">≥ 80</label>
-          </div>
-        </div>
-
-        <div class="control-group">
-          <div class="control-label">Number of brain metastases
-            <span class="hint">At first SRS</span>
-          </div>
-          <div class="segmented" data-input="nmets_benefit">
-            <input type="radio" name="nmets_b" id="nmets_b_one" value="one" checked>
-            <label for="nmets_b_one">Single</label>
-            <input type="radio" name="nmets_b" id="nmets_b_multi" value="multi">
-            <label for="nmets_b_multi">More than one</label>
-          </div>
-        </div>
-
-        <div class="control-group">
-          <div class="control-label">Neurological deficit pre-SRS
-            <span class="hint">Focal deficit</span>
-          </div>
-          <div class="segmented" data-input="neuro_benefit">
-            <input type="radio" name="neuro_b" id="neuro_b_no" value="no" checked>
-            <label for="neuro_b_no">No</label>
-            <input type="radio" name="neuro_b" id="neuro_b_yes" value="yes">
-            <label for="neuro_b_yes">Yes</label>
-          </div>
-        </div>
-
-        <div class="control-group">
-          <div class="control-label">Maximum target diameter
-            <span class="hint">Largest lesion</span>
-          </div>
-          <div class="segmented" data-input="diam_benefit">
-            <input type="radio" name="diam_b" id="diam_b_small" value="small" checked>
-            <label for="diam_b_small">&lt; 2.5 cm</label>
-            <input type="radio" name="diam_b" id="diam_b_large" value="large">
-            <label for="diam_b_large">≥ 2.5 cm</label>
-          </div>
-        </div>
-
+      <div class="controls" data-model="benefit">
         <div class="control-group">
           <div class="control-label">Age at SRS
             <span class="hint">Years</span>
           </div>
           <div class="slider-wrap">
-            <input type="range" id="age_b" min="20" max="90" value="62" step="1">
-            <span class="slider-value"><span id="age_b_val">62</span><span class="unit">y</span></span>
+            <input type="range" id="age_b" min="20" max="85" value="60" step="1" data-state="age">
+            <span class="slider-value"><span id="age_b_val">60</span><span class="unit">y</span></span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">Systemic disease
+            <span class="hint">Active extracranial</span>
+          </div>
+          <div class="segmented" data-input="systemic" data-model="benefit">
+            <input type="radio" name="systemic_b" id="systemic_b_no" value="no" checked>
+            <label for="systemic_b_no">No</label>
+            <input type="radio" name="systemic_b" id="systemic_b_yes" value="yes">
+            <label for="systemic_b_yes">Yes</label>
           </div>
         </div>
 
@@ -609,20 +629,50 @@ P(surgery) = 1 / (1 + exp(−η))
           <div class="control-label">Primary site
             <span class="hint">Histology</span>
           </div>
-          <div class="segmented" data-input="primary_benefit">
-            <input type="radio" name="prim_b" id="prim_b_lung" value="lung" checked>
+          <div class="segmented six-col" data-input="primary" data-model="benefit">
+            <input type="radio" name="primary_b" id="prim_b_lung" value="lung" checked>
             <label for="prim_b_lung">Lung</label>
-            <input type="radio" name="prim_b" id="prim_b_mel" value="melanoma">
-            <label for="prim_b_mel">Melanoma</label>
-            <input type="radio" name="prim_b" id="prim_b_other" value="other">
+            <input type="radio" name="primary_b" id="prim_b_breast" value="breast">
+            <label for="prim_b_breast">Breast</label>
+            <input type="radio" name="primary_b" id="prim_b_melanoma" value="melanoma">
+            <label for="prim_b_melanoma">Melanoma</label>
+            <input type="radio" name="primary_b" id="prim_b_gi" value="gi">
+            <label for="prim_b_gi">GI</label>
+            <input type="radio" name="primary_b" id="prim_b_kidney" value="kidney">
+            <label for="prim_b_kidney">Kidney</label>
+            <input type="radio" name="primary_b" id="prim_b_other" value="other">
             <label for="prim_b_other">Other</label>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">Cerebellar involvement
+            <span class="hint">Any lesion</span>
+          </div>
+          <div class="segmented" data-input="cerebellum" data-model="benefit">
+            <input type="radio" name="cerebellum_b" id="cb_b_no" value="no" checked>
+            <label for="cb_b_no">No</label>
+            <input type="radio" name="cerebellum_b" id="cb_b_yes" value="yes">
+            <label for="cb_b_yes">Yes</label>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">Brainstem involvement
+            <span class="hint">Any lesion</span>
+          </div>
+          <div class="segmented" data-input="brainstem" data-model="benefit">
+            <input type="radio" name="brainstem_b" id="bs_b_no" value="no" checked>
+            <label for="bs_b_no">No</label>
+            <input type="radio" name="brainstem_b" id="bs_b_yes" value="yes">
+            <label for="bs_b_yes">Yes</label>
           </div>
         </div>
       </div>
 
       <div class="output">
         <div class="output-label">Predicted Probability of Benefit</div>
-        <div class="output-question">Given this profile, how likely is surgery to extend OS beyond the non-surgical median?</div>
+        <div class="output-question">Given this profile, how likely is upfront surgery to extend overall survival beyond the non-surgical median?</div>
         <div class="prob-display">
           <span class="prob-value" id="prob-benefit" style="color: var(--positive);">—</span>
           <span class="prob-pct" style="color: var(--positive);">%</span>
@@ -643,7 +693,7 @@ P(surgery) = 1 / (1 + exp(−η))
     <div class="notes">
       <div class="note">
         <h3>Model</h3>
-        <p>Multivariable logistic regression on a 1:1 propensity-score-matched cohort. Outcome: median OS exceeding the non-surgical group's median ("surgery-beneficial").</p>
+        <p>Multivariable logistic regression on a 1:1 propensity-score-matched cohort (n = 124). Outcome: post-SRS median OS exceeding the non-surgical group's median ("surgery-beneficial").</p>
       </div>
       <div class="note">
         <h3>Discrimination</h3>
@@ -653,8 +703,148 @@ P(surgery) = 1 / (1 + exp(−η))
       <div class="note">
         <h3>Calibration</h3>
         <div class="stat">0.067</div>
-        <p>Mean absolute calibration error after bootstrap correction (n = 124). E/O = 1.01 at 1 yr, 1.02 at 3 yr.</p>
+        <p>Mean absolute calibration error after bootstrap correction. E/O = 1.01 at 1 yr, 1.02 at 3 yr.</p>
       </div>
+    </div>
+
+    <div class="equation">
+P(benefit) = 1 / (1 + exp(−η))
+<br>η = <span class="const">+2.514</span>
+   <span class="var">− 0.024</span> · Age
+   <span class="var">− 0.725</span> · Systemic
+   <span class="var">− 1.242</span> · Cerebellum
+   <span class="var">− 0.250</span> · Brainstem
+<br>&nbsp;&nbsp;&nbsp;&nbsp;+ primary site β (Breast +0.322, Lung +0.152, Melanoma −0.157, GI −0.532, Kidney −0.711, Other −0.700)
+    </div>
+  </section>
+
+  <!-- ─────── TAB 3: POST-SURGERY PROGNOSTIC OS ─────── -->
+  <section class="panel" id="panel-prognosis">
+    <div class="warn">
+      <strong>Implementation note.</strong> Predicted survival uses the Cox β coefficients and baseline survival S₀(t) exactly as printed in the statistical report. Because R's <code>rms::nomogram()</code> typically centers the linear predictor at the cohort mean before plotting, absolute survival values shown here may run lower than the published Figure 2b nomogram. Relative hazard ratios between patient profiles remain valid. Anchoring the baseline at the cohort mean would shift all predictions upward; clarification of the S₀(t) reference patient is pending.
+    </div>
+
+    <div class="layout">
+      <div class="controls" data-model="prognosis">
+        <div class="control-group">
+          <div class="control-label">Age at SRS
+            <span class="hint">Years</span>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" id="age_p" min="20" max="85" value="60" step="1" data-state="age">
+            <span class="slider-value"><span id="age_p_val">60</span><span class="unit">y</span></span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">Systemic disease
+            <span class="hint">Active extracranial</span>
+          </div>
+          <div class="segmented" data-input="systemic" data-model="prognosis">
+            <input type="radio" name="systemic_p" id="systemic_p_no" value="no" checked>
+            <label for="systemic_p_no">No</label>
+            <input type="radio" name="systemic_p" id="systemic_p_yes" value="yes">
+            <label for="systemic_p_yes">Yes</label>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">Primary site
+            <span class="hint">Histology</span>
+          </div>
+          <div class="segmented six-col" data-input="primary" data-model="prognosis">
+            <input type="radio" name="primary_p" id="prim_p_lung" value="lung" checked>
+            <label for="prim_p_lung">Lung</label>
+            <input type="radio" name="primary_p" id="prim_p_breast" value="breast">
+            <label for="prim_p_breast">Breast</label>
+            <input type="radio" name="primary_p" id="prim_p_melanoma" value="melanoma">
+            <label for="prim_p_melanoma">Melanoma</label>
+            <input type="radio" name="primary_p" id="prim_p_gi" value="gi">
+            <label for="prim_p_gi">GI</label>
+            <input type="radio" name="primary_p" id="prim_p_kidney" value="kidney">
+            <label for="prim_p_kidney">Kidney</label>
+            <input type="radio" name="primary_p" id="prim_p_other" value="other">
+            <label for="prim_p_other">Other</label>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">Cerebellar involvement
+            <span class="hint">Any lesion</span>
+          </div>
+          <div class="segmented" data-input="cerebellum" data-model="prognosis">
+            <input type="radio" name="cerebellum_p" id="cb_p_no" value="no" checked>
+            <label for="cb_p_no">No</label>
+            <input type="radio" name="cerebellum_p" id="cb_p_yes" value="yes">
+            <label for="cb_p_yes">Yes</label>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">Brainstem involvement
+            <span class="hint">Any lesion</span>
+          </div>
+          <div class="segmented" data-input="brainstem" data-model="prognosis">
+            <input type="radio" name="brainstem_p" id="bs_p_no" value="no" checked>
+            <label for="bs_p_no">No</label>
+            <input type="radio" name="brainstem_p" id="bs_p_yes" value="yes">
+            <label for="bs_p_yes">Yes</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="output">
+        <div class="output-label">Predicted Overall Survival</div>
+        <div class="output-question">Given this profile, what is the projected survival at 1, 3, and 5 years following surgical resection?</div>
+
+        <div class="survival-grid">
+          <div class="survival-row">
+            <div class="survival-time">1 year</div>
+            <div class="survival-bar"><div class="survival-bar-fill" id="bar-os1"></div></div>
+            <div class="survival-pct" id="os1">—%</div>
+          </div>
+          <div class="survival-row">
+            <div class="survival-time">3 years</div>
+            <div class="survival-bar"><div class="survival-bar-fill" id="bar-os3"></div></div>
+            <div class="survival-pct" id="os3">—%</div>
+          </div>
+          <div class="survival-row">
+            <div class="survival-time">5 years</div>
+            <div class="survival-bar"><div class="survival-bar-fill" id="bar-os5"></div></div>
+            <div class="survival-pct" id="os5">—%</div>
+          </div>
+        </div>
+
+        <div class="decomp">
+          <div class="decomp-title">Linear predictor (Cox η)</div>
+          <div id="decomp-prognosis"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="notes">
+      <div class="note">
+        <h3>Model</h3>
+        <p>Cox proportional hazards on the surgical subset (n = 222). Predicted survival from S(t | x) = S₀(t)<sup>exp(η)</sup>, where S₀(t) are empirical baseline survival probabilities at 1, 3, and 5 years.</p>
+      </div>
+      <div class="note">
+        <h3>Discrimination</h3>
+        <div class="stat">0.66–0.79</div>
+        <p>C-index range across 1-, 3-, and 5-year horizons (training 0.66/0.73/0.66, validation 0.79/0.76/0.71).</p>
+      </div>
+      <div class="note">
+        <h3>Note on reference</h3>
+        <p>Predicted curves are anchored to the model's reference patient (continuous covariates at mean, indicators at zero). Setting all primary-site indicators to "No" reflects the phantom reference category, not a realistic patient — select one primary site for valid predictions.</p>
+      </div>
+    </div>
+
+    <div class="equation">
+S(t | x) = S₀(t)<sup>exp(η)</sup> &nbsp;&nbsp; <span class="const">S₀(1)=0.546, S₀(3)=0.316, S₀(5)=0.210</span>
+<br>η = <span class="var">+0.0131</span> · Age
+  <span class="var">+ 0.394</span> · Systemic
+  <span class="var">+ 0.454</span> · Cerebellum
+  <span class="var">+ 0.199</span> · Brainstem
+<br>&nbsp;&nbsp;&nbsp;&nbsp;+ primary site β (Breast +0.187, Lung +0.482, Melanoma +0.075, GI +0.759, Kidney +0.626, Other +1.221)
     </div>
   </section>
 
@@ -668,43 +858,39 @@ P(surgery) = 1 / (1 + exp(−η))
 // ════════════════════════════════════════════════════════════════════
 // MODELS
 //
-// Tab 1 (receipt) coefficients are confirmed from the March 4, 2026
-//   statistical report.
-// Tab 2 (benefit) coefficients are PLACEHOLDERS — replace with the real
-//   logistic coefficients from the matched-cohort model once the updated
-//   manuscript is in hand. Search for `// REPLACE` to find swap points.
+// Three nomograms from the Pro00081642 analysis:
+//
+//   1. receipt   — Logistic regression for receipt of upfront surgery.
+//                  Source: manuscript Table 2 (OR table).
+//   2. benefit   — Logistic regression for surgical benefit (OS).
+//                  Source: statistical report 2026-05-18, coef(fit_logit_os).
+//   3. prognosis — Cox proportional hazards for post-SRS overall survival.
+//                  Source: statistical report 2026-05-18 (β + baseline S₀(t)).
+//
+// All βs are exactly as printed in the source.
 // ════════════════════════════════════════════════════════════════════
 
 const MODELS = {
 
-  // ───────── Tab 1: Receipt-of-Surgery logistic regression ─────────
-  // Source: Updated manuscript Table 2 (n=306 training cohort).
-  // ORs (from the manuscript) → β = ln(OR), with reference levels flipped
-  // so each indicator below FAVORS surgery when present:
-  //
+  // ───────── Tab 1: Receipt of upfront surgery (logistic) ─────────
+  // Source: manuscript Table 2.
+  // ORs (manuscript) → β = ln(OR); references flipped so each indicator
+  // favors surgery when present:
   //   KPS 80–100 vs 40–70:              OR = 2.164  → β = +0.772
-  //   Single vs Multiple brain mets:    OR = 3.378  → β = +1.217
+  //   Single vs multiple brain mets:    OR = 3.378  → β = +1.217
   //   Neuro deficit Yes vs No:          OR = 2.375  → β = +0.865
   //   Max diameter ≥2.5 vs <2.5 cm:     OR = 33.333 → β = +3.507
-  //
-  // Intercept note: the original report's intercept (−2.017) was tied to
-  // the prior parameterization. With references flipped, that intercept
-  // produces probabilities that overshoot cohort prevalence (~21%
-  // received surgery). The intercept below (−3.43) is calibrated so the
-  // population-weighted-average profile predicts ≈21%, matching the
-  // observed surgery rate. This is a derived value, not an ML estimate;
-  // value from the maximum-likelihood fit when available.
+  // Intercept calibrated to the cohort's 21% surgery prevalence;
+  // the ML-estimated intercept should be substituted when available.
   receipt: {
+    type: 'logistic',
     intercept: -3.43,
     terms: [
-      { id: 'kps_receipt',   label: 'KPS 80–100 (vs 40–70)',          beta: +0.772, when: v => v === 'high' },
-      { id: 'nmets_receipt', label: 'Single met (vs ≥2)',             beta: +1.217, when: v => v === 'one' },
-      { id: 'neuro_receipt', label: 'Neurologic deficit (vs none)',   beta: +0.865, when: v => v === 'yes' },
-      { id: 'diam_receipt',  label: 'Diameter ≥2.5 cm (vs <2.5 cm)',  beta: +3.507, when: v => v === 'large' },
+      { id: 'kps',   label: 'KPS 80–100 (vs 40–70)',          beta: +0.772, when: v => v === 'high' },
+      { id: 'nmets', label: 'Single met (vs ≥2)',             beta: +1.217, when: v => v === 'one' },
+      { id: 'neuro', label: 'Neurologic deficit (vs none)',   beta: +0.865, when: v => v === 'yes' },
+      { id: 'diam',  label: 'Diameter ≥2.5 cm (vs <2.5 cm)',  beta: +3.507, when: v => v === 'large' },
     ],
-    // Thresholds calibrated to the manuscript's classification logic
-    // (p ≥ 0.5 = predicted surgery in validation tables) and cohort
-    // baseline (~21% receive surgery).
     classify: p => {
       if (p >= 0.50) return { label: 'Predicted to undergo surgical resection — consistent with selection criteria', tone: 'pos' };
       if (p >= 0.21) return { label: 'Above cohort baseline (≈21%) — some surgical indication present', tone: 'neutral' };
@@ -712,28 +898,57 @@ const MODELS = {
     }
   },
 
-  // ───────── Tab 2: Surgery-Benefit logistic regression ─────────
-  // REPLACE: real coefficients pending updated manuscript.
-  // Placeholders below are clinically plausible but NOT model output.
+  // ───────── Tab 2: Surgery benefit (logistic) ─────────
+  // Source: statistical report 2026-05-18, coef(fit_logit_os).
+  // PSM-matched cohort, training n=124. Outcome: surgical OS exceeds
+  // the non-surgical group's median OS.
   benefit: {
-    intercept: -0.40,                            // REPLACE
+    type: 'logistic',
+    intercept: +2.51384937,
     terms: [
-      // REPLACE every beta below
-      { id: 'kps_benefit',   label: 'KPS ≥ 80 (vs ≤70)',              beta: +0.85, when: v => v === 'high' },
-      { id: 'nmets_benefit', label: 'Single met (vs >1)',             beta: +0.70, when: v => v === 'one' },
-      { id: 'neuro_benefit', label: 'Neuro deficit present',          beta: +0.55, when: v => v === 'yes' },
-      { id: 'diam_benefit',  label: 'Diameter ≥ 2.5 cm (vs <2.5 cm)', beta: +0.90, when: v => v === 'large' },
-      // Continuous term: contribution = beta * (age − ref)
-      { id: 'age_b', label: 'Age (per year above 60)', beta: -0.025, continuous: true, ref: 60 },
-      // Three-level categorical
-      { id: 'primary_benefit', label: 'Melanoma (vs lung)',  beta: -0.15, when: v => v === 'melanoma' },
-      { id: 'primary_benefit', label: 'Other (vs lung)',     beta: -0.10, when: v => v === 'other'    },
+      // Continuous: contribution = β · age (no centering applied in report)
+      { id: 'age',        label: 'Age (per year)',          beta: -0.02448153, continuous: true, ref: 0 },
+      { id: 'systemic',   label: 'Systemic disease (vs no)', beta: -0.72505820, when: v => v === 'yes' },
+      // Primary site: exactly one is "Yes" at any time; reference = phantom (no primary)
+      { id: 'primary',    label: 'Breast primary',           beta: +0.32243997, when: v => v === 'breast' },
+      { id: 'primary',    label: 'Lung primary',             beta: +0.15241732, when: v => v === 'lung' },
+      { id: 'primary',    label: 'Melanoma primary',         beta: -0.15695462, when: v => v === 'melanoma' },
+      { id: 'primary',    label: 'GI primary',               beta: -0.53222903, when: v => v === 'gi' },
+      { id: 'primary',    label: 'Kidney primary',           beta: -0.71138409, when: v => v === 'kidney' },
+      { id: 'primary',    label: 'Other primary',            beta: -0.69969600, when: v => v === 'other' },
+      { id: 'cerebellum', label: 'Cerebellar involvement',   beta: -1.24244902, when: v => v === 'yes' },
+      { id: 'brainstem',  label: 'Brainstem involvement',    beta: -0.25009401, when: v => v === 'yes' },
     ],
     classify: p => {
       if (p >= 0.65) return { label: 'Likely to benefit from upfront surgery', tone: 'pos' };
       if (p >= 0.45) return { label: 'Equivocal — discuss in multidisciplinary review', tone: 'neutral' };
       return { label: 'Unlikely to benefit beyond non-surgical median', tone: 'neg' };
     }
+  },
+
+  // ───────── Tab 3: Post-surgery prognostic OS (Cox) ─────────
+  // Source: statistical report 2026-05-18 (Variable / Beta table + baseline S₀(t)).
+  // Cox model on surgical subset (n=222). Higher η = worse prognosis.
+  // S(t | x) = S₀(t)^exp(η). No intercept term in Cox.
+  prognosis: {
+    type: 'cox',
+    times: [
+      { label: '1 year',  years: 1, S0: 0.5457507, elId: 'os1' },
+      { label: '3 years', years: 3, S0: 0.3162016, elId: 'os3' },
+      { label: '5 years', years: 5, S0: 0.2099604, elId: 'os5' },
+    ],
+    terms: [
+      { id: 'age',        label: 'Age (per year)',         beta: +0.01314900, continuous: true, ref: 0 },
+      { id: 'systemic',   label: 'Systemic disease (vs no)', beta: +0.39353089, when: v => v === 'yes' },
+      { id: 'primary',    label: 'Breast primary',          beta: +0.18708042, when: v => v === 'breast' },
+      { id: 'primary',    label: 'Lung primary',            beta: +0.48188003, when: v => v === 'lung' },
+      { id: 'primary',    label: 'Melanoma primary',        beta: +0.07487311, when: v => v === 'melanoma' },
+      { id: 'primary',    label: 'GI primary',              beta: +0.75880149, when: v => v === 'gi' },
+      { id: 'primary',    label: 'Kidney primary',          beta: +0.62593792, when: v => v === 'kidney' },
+      { id: 'primary',    label: 'Other primary',           beta: +1.22101005, when: v => v === 'other' },
+      { id: 'cerebellum', label: 'Cerebellar involvement',  beta: +0.45429196, when: v => v === 'yes' },
+      { id: 'brainstem',  label: 'Brainstem involvement',   beta: +0.19860787, when: v => v === 'yes' },
+    ]
   }
 };
 
@@ -742,36 +957,36 @@ const MODELS = {
 // ════════════════════════════════════════════════════════════════════
 
 const state = {
-  receipt: { kps_receipt: 'high', nmets_receipt: 'multi', neuro_receipt: 'no', diam_receipt: 'small' },
-  benefit: { kps_benefit: 'low', nmets_benefit: 'one', neuro_benefit: 'no', diam_benefit: 'small',
-             age_b: 62, primary_benefit: 'lung' }
+  receipt:   { kps: 'high', nmets: 'multi', neuro: 'no', diam: 'small' },
+  benefit:   { age: 60, systemic: 'no', primary: 'lung', cerebellum: 'no', brainstem: 'no' },
+  prognosis: { age: 60, systemic: 'no', primary: 'lung', cerebellum: 'no', brainstem: 'no' }
 };
 
 function logit(eta) { return 1 / (1 + Math.exp(-eta)); }
 
-function compute(modelKey) {
+// Returns linear predictor η + per-term decomposition
+function computeEta(modelKey) {
   const model = MODELS[modelKey];
   const s = state[modelKey];
-  let eta = model.intercept;
-  const contributions = [
-    { name: 'Intercept', delta: model.intercept, beta: model.intercept }
-  ];
-
+  let eta = model.intercept || 0;
+  const contributions = [];
+  if (model.intercept !== undefined) {
+    contributions.push({ name: 'Intercept', delta: model.intercept });
+  }
   for (const term of model.terms) {
     const v = s[term.id];
     let delta = 0;
     if (term.continuous) {
-      delta = term.beta * (Number(v) - term.ref);
+      delta = term.beta * (Number(v) - (term.ref || 0));
     } else if (term.when && term.when(v)) {
       delta = term.beta;
     }
     if (delta !== 0) {
       eta += delta;
-      contributions.push({ name: term.label, delta, beta: term.beta });
+      contributions.push({ name: term.label, delta });
     }
   }
-
-  return { eta, p: logit(eta), contributions };
+  return { eta, contributions };
 }
 
 function fmtDelta(d) {
@@ -779,23 +994,7 @@ function fmtDelta(d) {
   return sign + Math.abs(d).toFixed(3);
 }
 
-function render(modelKey) {
-  const { p, contributions, eta } = compute(modelKey);
-  const pct = (p * 100);
-
-  // Probability + gauge
-  const probEl = document.getElementById('prob-' + modelKey);
-  const gaugeEl = document.getElementById('gauge-' + modelKey);
-  probEl.textContent = pct.toFixed(1);
-  gaugeEl.style.width = Math.min(100, Math.max(0, pct)) + '%';
-
-  // Classification
-  const cls = MODELS[modelKey].classify(p);
-  const classEl = document.getElementById('class-' + modelKey);
-  classEl.innerHTML = '<strong>' + cls.label + '</strong>';
-
-  // Decomposition
-  const decompEl = document.getElementById('decomp-' + modelKey);
+function renderDecomp(elId, contributions, eta) {
   let html = '';
   for (const c of contributions) {
     const cls = c.delta >= 0 ? 'pos' : 'neg';
@@ -808,35 +1007,66 @@ function render(modelKey) {
     <span class="name">Linear predictor (η)</span>
     <span class="val">${eta.toFixed(3)}</span>
   </div>`;
-  decompEl.innerHTML = html;
+  document.getElementById(elId).innerHTML = html;
+}
+
+function render(modelKey) {
+  const model = MODELS[modelKey];
+  const { eta, contributions } = computeEta(modelKey);
+
+  if (model.type === 'logistic') {
+    const p = logit(eta);
+    const pct = p * 100;
+    document.getElementById('prob-' + modelKey).textContent = pct.toFixed(1);
+    document.getElementById('gauge-' + modelKey).style.width = Math.min(100, Math.max(0, pct)) + '%';
+    if (model.classify) {
+      const cls = model.classify(p);
+      document.getElementById('class-' + modelKey).innerHTML = '<strong>' + cls.label + '</strong>';
+    }
+    renderDecomp('decomp-' + modelKey, contributions, eta);
+  }
+
+  else if (model.type === 'cox') {
+    // S(t | x) = S0(t) ^ exp(η)
+    const hr = Math.exp(eta);
+    for (const t of model.times) {
+      const s = Math.pow(t.S0, hr);
+      const pct = Math.max(0, Math.min(1, s)) * 100;
+      document.getElementById(t.elId).textContent = pct.toFixed(1) + '%';
+      document.getElementById('bar-' + t.elId).style.width = pct + '%';
+    }
+    renderDecomp('decomp-' + modelKey, contributions, eta);
+  }
 }
 
 // ════════════════════════════════════════════════════════════════════
 // Input wiring
 // ════════════════════════════════════════════════════════════════════
 
-// Segmented controls (radio groups)
+// Segmented controls — read modelKey + stateKey from data attributes
 document.querySelectorAll('.segmented').forEach(seg => {
-  const inputId = seg.dataset.input;
-  const modelKey = inputId.endsWith('_receipt') ? 'receipt' : 'benefit';
+  const modelKey = seg.dataset.model;
+  const stateKey = seg.dataset.input;
+  if (!modelKey || !stateKey) return;
   seg.querySelectorAll('input[type=radio]').forEach(radio => {
     radio.addEventListener('change', () => {
-      state[modelKey][inputId] = radio.value;
+      state[modelKey][stateKey] = radio.value;
       render(modelKey);
     });
   });
 });
 
-// Age slider
-const ageSlider = document.getElementById('age_b');
-const ageVal = document.getElementById('age_b_val');
-if (ageSlider) {
-  ageSlider.addEventListener('input', () => {
-    state.benefit.age_b = Number(ageSlider.value);
-    ageVal.textContent = ageSlider.value;
-    render('benefit');
+// Sliders (continuous predictors)
+document.querySelectorAll('.controls input[type=range]').forEach(slider => {
+  const modelKey = slider.closest('.controls').dataset.model;
+  const stateKey = slider.dataset.state;
+  const valEl = document.getElementById(slider.id + '_val');
+  slider.addEventListener('input', () => {
+    state[modelKey][stateKey] = Number(slider.value);
+    if (valEl) valEl.textContent = slider.value;
+    render(modelKey);
   });
-}
+});
 
 // Tabs
 document.querySelectorAll('.tab').forEach(tab => {
@@ -851,6 +1081,7 @@ document.querySelectorAll('.tab').forEach(tab => {
 // Initial render
 render('receipt');
 render('benefit');
+render('prognosis');
 </script>
 </body>
 </html>
